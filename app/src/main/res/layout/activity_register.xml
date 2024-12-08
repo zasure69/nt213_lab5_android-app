@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+<!--    android:paddingLeft="@dimen/activity_horizontal_margin"-->
+<!--    android:paddingTop="@dimen/activity_vertical_margin"-->
+<!--    android:paddingRight="@dimen/activity_horizontal_margin"-->
+<!--    android:paddingBottom="@dimen/activity_vertical_margin"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#85AFC4"
+        tools:context=".LoginActivity">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="Register"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <!-- Trường nhập Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_email"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                app:tint="#9E9E9E" />
+
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/prompt_email"
+                android:paddingStart="8dp"
+                android:background="@null"
+                android:textColor="#000000"
+                android:textColorHint="#9E9E9E"
+                android:textSize="20dp"/>
+        </LinearLayout>
+
+        <!-- Trường nhập Username -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_username"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                app:tint="#9E9E9E" />
+
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/prompt_username"
+                android:paddingStart="8dp"
+                android:background="@null"
+                android:textColor="#000000"
+                android:textColorHint="#9E9E9E"
+                android:textSize="20dp"/>
+        </LinearLayout>
+
+        <!-- Trường nhập Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_password"
+                android:layout_gravity="center_vertical"
+                app:tint="#9E9E9E" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/prompt_password"
+                android:paddingStart="8dp"
+                android:background="@null"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:textColorHint="#9E9E9E"
+                android:textSize="20dp"/>
+        </LinearLayout>
+
+        <!-- Nút Register -->
+        <Button
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:backgroundTint="@color/gray"
+            android:text="Register"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:enabled="false"
+            android:paddingVertical="12dp"
+            android:elevation="4dp" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="NotSibling" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
