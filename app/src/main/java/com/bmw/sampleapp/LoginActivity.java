@@ -14,6 +14,14 @@ import android.util.Log;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameField, passwordField;
     private Button loginButton;
     private Button registerButton;
-    private SQLiteConnector db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameField.addTextChangedListener(textWatcher);
         passwordField.addTextChangedListener(textWatcher);
 
-        // Khởi tạo một đối tượng MySQLConnector
-        db = new SQLiteConnector(this);
 
         // Xử lý bấm nút Login
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -62,26 +67,38 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordField.getText().toString().trim();
 
                 // Băm password
-                String hashedPass = hashPassword(password);
+                String hPassword = hashPassword(password);
+                Thread networkThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Thực hiện yêu cầu
+                        final String result = callLoginAPI(username, hPassword); // Hàm thực hiện yêu cầu
 
-                // Kiểm tra thông tin
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else if (db.checkUser(username, hashedPass)) {
-                    Log.d("Thông báo", "Đăng nhập thành công.");
-                    Log.d("Thông báo", "username: " + username);
-                    Log.d("Thông báo", "Password: " + hashedPass);
-                    // Đăng nhập thành công
-                    Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        // Cập nhật UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (result.contains("success")) {
+                                    Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                                    // Chuyển sang trang chính của ứng dụng
+                                    Intent intent = new Intent(LoginActivity.this, DisplayActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Log.i("result", result);
+                                    try {
+                                        JSONObject r = new JSONObject(result);
+                                        Toast.makeText(LoginActivity.this, r.getString("message"), Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                networkThread.start();
 
-                    // Chuyển sang trang chính của ứng dụng
-                    Intent intent = new Intent(LoginActivity.this, DisplayActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    // Thông báo lỗi
-                    Toast.makeText(LoginActivity.this, "Invalid email or password!", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -93,6 +110,46 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private String callLoginAPI(String username, String password) {
+        try {
+            // URL của API Login
+            URL url = new URL("http://192.168.100.18:8081/login/login.php");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Tạo JSON data
+            String jsonInput = "{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}";
+
+            // Gửi dữ liệu đến server
+            OutputStream os = conn.getOutputStream();
+            os.write(jsonInput.getBytes());
+            os.flush();
+            os.close();
+
+            // Nhận phản hồi từ server
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            br.close();
+            return response.toString();
+
+        } catch (Exception e) {
+            Log.d("error login", e.toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LoginActivity.this, "Error connecting to server", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return "error";
+        }
     }
     @SuppressLint("NewApi")
     private void checkFields() {
