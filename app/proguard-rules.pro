@@ -1,21 +1,43 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Giữ lại lớp RegisterActivity và tất cả các phương thức của nó
+-keep class com.bmw.sampleapp.RegisterActivity {
+    *;
+}
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Giữ lại lớp LoginActivity và tất cả các phương thức của nó
+-keep class com.bmw.sampleapp.LoginActivity {
+    *;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Giữ lại lớp DisplayActivity và tất cả các phương thức của nó
+-keep class com.bmw.sampleapp.DisplayActivity {
+    *;
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Giữ lại lớp SQLiteConnector
+-keepclassmembernames class com.bmw.sampleapp.SQLiteConnector {
+    public void addUser(com.bmw.sampleapp.User);
+    public boolean checkUser(java.lang.String);
+    public boolean checkUser(java.lang.String, java.lang.String);
+    public java.lang.String getUrl(java.lang.String);
+}
+
+# Loại bỏ các phương thức cụ thể không cần thiết
+-assumenosideeffects class com.bmw.sampleapp.SQLiteConnector {
+    public void deleteUser(com.bmw.sampleapp.User);
+    public void updateUser(com.bmw.sampleapp.User);
+    public java.util.List getAllUser();
+}
+
+# Giữ lại lớp User nếu cần thiết
+-keep class com.bmw.sampleapp.User {
+    *;
+}
+
+# Giữ lại các lớp hoạt động (Activity) trong ứng dụng
+-keep public class * extends android.app.Activity
+-keep public class * extends androidx.appcompat.app.AppCompatActivity
+
+# Giữ lại các phương thức khởi tạo từ XML
+-keepclassmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
