@@ -13,26 +13,6 @@
     *;
 }
 
-# Giữ lại lớp SQLiteConnector
--keepclassmembernames class com.bmw.sampleapp.SQLiteConnector {
-    public void addUser(com.bmw.sampleapp.User);
-    public boolean checkUser(java.lang.String);
-    public boolean checkUser(java.lang.String, java.lang.String);
-    public java.lang.String getUrl(java.lang.String);
-}
-
-# Loại bỏ các phương thức cụ thể không cần thiết
--assumenosideeffects class com.bmw.sampleapp.SQLiteConnector {
-    public void deleteUser(com.bmw.sampleapp.User);
-    public void updateUser(com.bmw.sampleapp.User);
-    public java.util.List getAllUser();
-}
-
-# Giữ lại lớp User nếu cần thiết
--keep class com.bmw.sampleapp.User {
-    *;
-}
-
 # Giữ lại các lớp hoạt động (Activity) trong ứng dụng
 -keep public class * extends android.app.Activity
 -keep public class * extends androidx.appcompat.app.AppCompatActivity
@@ -41,3 +21,11 @@
 -keepclassmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet);
 }
+#Tối ưu hóa mã
+-optimizationpasses 3 #Thực hiện tối ưu hóa mã 3 lần -> giúp giảm kích thước mã
+-allowaccessmodification # Thay đổi các quyền truy cập của các thành phần để tối ưu hóa mã
+-mergeinterfacesaggressively # Kết hợp các interface tương tự lại với nhau
+# Làm rối tên lớp và phương thức
+-obfuscationdictionary proguard-dictionaries/class-names.txt
+-classobfuscationdictionary proguard-dictionaries/method-names.txt
+-packageobfuscationdictionary proguard-dictionaries/package-names.txt

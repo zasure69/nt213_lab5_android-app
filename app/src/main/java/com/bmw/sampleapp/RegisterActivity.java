@@ -69,12 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = emailField.getText().toString().trim();
                 String username = usernameField.getText().toString().trim();
                 String password = passwordField.getText().toString().trim();
-                String hPassword = hashPassword(password);
                 Thread networkThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         // Thực hiện yêu cầu
-                        final String result = callRegisterAPI(username, email, hPassword); // Hàm thực hiện yêu cầu
+                        final String result = callRegisterAPI(username, email, password); // Hàm thực hiện yêu cầu
 
                         // Cập nhật UI thread
                         runOnUiThread(new Runnable() {
