@@ -65,14 +65,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = usernameField.getText().toString().trim();
                 String password = passwordField.getText().toString().trim();
-
-                // Băm password
-                String hPassword = hashPassword(password);
                 Thread networkThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         // Thực hiện yêu cầu
-                        final String result = callLoginAPI(username, hPassword); // Hàm thực hiện yêu cầu
+                        final String result = callLoginAPI(username, password); // Hàm thực hiện yêu cầu
 
                         // Cập nhật UI thread
                         runOnUiThread(new Runnable() {
